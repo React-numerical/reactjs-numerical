@@ -2,16 +2,13 @@ import { useState } from "react"
 import { Button, Container, Form, Table } from "react-bootstrap";
 
 
-
-
-
 const Lagrange =()=>{
     const data = [
-        {index: 1, X:0, Y:9.81},
-        {index: 2, X:20000,Y:9.7487},
-        {index: 3, X:40000, Y:9.6879},
-        {index: 4, X:60000, Y:9.6879},
-        {index: 5, X:80000,Y:9.5682}
+        {index: 0, X:0, Y:9.81},
+        {index: 1, X:20000,Y:9.7487},
+        {index: 2, X:40000, Y:9.6879},
+        {index: 3, X:60000, Y:9.6879},
+        {index: 4, X:80000,Y:9.5682}
     ]
     const data2 =[];
 
@@ -38,14 +35,15 @@ const Lagrange =()=>{
     }
 
     const [html, setHtml] = useState(null);
-    const [N,setN] = useState(0)
-    const [Xcal,setXcal] = useState(0)
-    const [X,setX] = useState(0)
+    
+    const [N, setN] = useState(0)
+    const [Xcal, setXcal] = useState(0)
+    const [X, setX] = useState(0)
+
     const Index = new Array(N);
 
     const calLagrange= () => {
         var L = new Array(N);
-        console.log(L)
         var ans = 0
         var up = 1
         var down = 1;
@@ -54,24 +52,17 @@ const Lagrange =()=>{
         for(var i=0;i<N;i++){
             iter++;
             for(var j=0;j<N;j++){
-                if(data[Index[(j%N+N)%N]].X!=data[Index[i]].X){
+                if(data[Index[(j%N+N)%N]].X!==data[Index[i]].X){
                     
                     up*=(data[Index[j]].X-X);
-                    console.log("up = X["+j+"]-x = "+data[Index[j]].X+"-"+X+" = "+up);
                     down*=(data[Index[j]].X-data[Index[i]].X);
-                    console.log("down = X["+j+"]-X["+i+"] = "+data[Index[j]].X+"-"+data[Index[i]].X+" = "+down);
                 }
-                console.log("up"+(i+1)+ " = "+up);
-			    console.log("down"+(i+1)+ " = "+down);
             }
             L[i] = 1;
             L[i] *= up/down;
-            console.log(L)
             up = 1;
             down = 1;
-            console.log("L"+i+ " = "+L[i]);
             ans += L[i]*data[Index[i]].Y;
-            console.log("y = f(x) = "+ans);
             obj = {
                 Iteration:iter,
                 L:L[i],
@@ -82,20 +73,13 @@ const Lagrange =()=>{
         }
     }
 
-    const inputX = (event) =>{
-        console.log(event.target.value)
-        setX(event.target.value)
-    }
-
     const calculateRoot = () =>{
         var n = parseInt(N)
         var Xcalnum = parseFloat(Xcal)
         for(var i=0;i<n;i++){
             Index[i] = (document.getElementById(i).value)-1;
         }
-        console.log(Index)
         calLagrange(Xcalnum)
-        console.log(data2);
         setHtml(print());
     }
 
@@ -113,6 +97,7 @@ const Lagrange =()=>{
     
     return (
             <Container>
+                <h1>Lagrange Interpolation Method</h1>
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
@@ -125,7 +110,7 @@ const Lagrange =()=>{
                     {data.map((element, index)=>{
                         return  (
                         <tr key={index}>
-                            <td>{element.index}</td>
+                            <td>{element.index+1}</td>
                             <td>{element.X}</td>
                             <td>{element.Y}</td>
                         </tr>)
@@ -133,20 +118,20 @@ const Lagrange =()=>{
                 </tbody>
                 </Table>
                 <Container>
-                        <Form>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Input number of point</Form.Label>
-                                <input type="number" id="N" onChange={createInput} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
-                            </Form.Group>
-                                <div id="NumberInput"></div>
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Input number of point</Form.Label>
+                            <input type="number" id="N" onChange={createInput} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
+                            <div id="NumberInput"></div>
                             <br></br>
-                                <Form.Label>Input X</Form.Label>
-                                <input type="number" id="X" onChange={inputX} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
-                            <br></br>
-                            <Button variant="dark" onClick={calculateRoot}>
-                                Calculate
-                            </Button>
-                        </Form>
+                            <Form.Label>Input X</Form.Label>
+                            <input type="number" id="X" onChange={(e)=>{setX(e.target.value)}} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
+                        </Form.Group>
+                        <br></br>
+                        <Button variant="dark" onClick={calculateRoot}>
+                            Calculate
+                        </Button>
+                    </Form>
                         <br></br>
                 <h5>Answer = {Xcal.toPrecision(7)}</h5>
                 <Container>

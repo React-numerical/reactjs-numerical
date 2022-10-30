@@ -50,7 +50,6 @@ const Spline =()=>{
     const [html, setHtml] = useState(null);
     const [N,setN] = useState(0)
     const [X,setX] = useState(0)
-    const Index = new Array(N);
     const [AnsLinear,setAnsLinear] = useState(0);
     const [AnsQuad, setQuad ] = useState(0);
 
@@ -68,7 +67,7 @@ const Spline =()=>{
       var n = M[0].length;
       for(var k=0; k<Math.min(m,n); ++k) {
         var i_max = findPivot(M, k);
-        if (M[i_max, k] == 0)
+        if (M[i_max, k] === 0)
           throw "matrix is singular";
         swap_rows(M, k, i_max);
         for(var i=k+1; i<m; ++i) {
@@ -92,7 +91,7 @@ const Spline =()=>{
     }
     
     const swap_rows = (M, i_max, k) => {
-      if (i_max != k) {
+      if (i_max !== k) {
         var temp = M[i_max];
         M[i_max] = M[k];
         M[k] = temp;
@@ -119,6 +118,7 @@ const Spline =()=>{
     }
     
     const extractX = (M) => {
+        var a, b , c;
         var pos = 0;
         var x = [];
         var m = M.length;
@@ -127,21 +127,17 @@ const Spline =()=>{
         for(var i=0; i<m; ++i){
             
             x.push(M[i][n-1]);
-            if(i==0){
-                var a = 0;
+            if(i===0){
+                a = 0;
             }
-            else if(((i+3)%3)==0){
-                var a = x[i];
-                //console.log("A["+j+"] = "+A[j]);
-                //console.log("matrix["+i+"]["+k+"] = "+matrix[j][k]);
+            else if(((i+3)%3)===0){
+                a = x[i];
             }
-            else if(((i+3)%3)==1){
-                var b = x[i];
-                //console.log("B ["+j+"] = "+B[j]);
-                //console.log("matrix["+i+"]["+k+"] = "+matrix[j][k]);
+            else if(((i+3)%3)===1){
+                b = x[i];
             }
-            else if(((i+3)%3)==2){
-                var c = x[i];
+            else if(((i+3)%3)===2){
+                c = x[i];
                 pos++;
                 obj = {
                     Pos:pos,
@@ -192,7 +188,7 @@ const Spline =()=>{
         }
         for(i=n;i<=n+(n%3)+1;i++){
             for(j=0;j<=1;j++){
-                if (j==0){
+                if (j===0){
                     a[2*i+j] = 2*data[i-(n-1)].X;
                     b[2*i+j] = 1;
                     c[2*i+j] = 0;
@@ -206,30 +202,20 @@ const Spline =()=>{
         }
         j=0;
         do{
-            if(j==0){
+            if(j===0){
                 i=j
-            }else if(j%2==0){
+            }else if(j%2===0){
                 i=j+j/2
             }
-            //console.log(">>>j = "+j)
                 for(k=i;k<i+3;k++){
-                //console.log(">>>>>>i = "+i)
-                //console.log(">>>>>>k = "+k)
-                //console.log("(k+3%3) = "+(k+3%3))
-                    if(((k+3)%3)==0){
+                    if(((k+3)%3)===0){
                         e[j][k] = a[j];
-                        //console.log("A["+j+"] = "+A[j]);
-                        //console.log("matrix["+i+"]["+k+"] = "+matrix[j][k]);
                     }
-                    else if(((k+3)%3)==1){
+                    else if(((k+3)%3)===1){
                         e[j][k] = b[j];
-                        //console.log("B ["+j+"] = "+B[j]);
-                        //console.log("matrix["+i+"]["+k+"] = "+matrix[j][k]);
                     }
-                    else if(((k+3)%3)==2){
+                    else if(((k+3)%3)===2){
                         e[j][k] = c[j];
-                        //console.log("C ["+j+"] = "+C[j]);
-                        //console.log("matrix["+i+"]["+k+"] = "+matrix[j][k]);
                     }
                 }
             j++;
@@ -238,24 +224,14 @@ const Spline =()=>{
         i=0
         var num=j;
         for(j=2*n;j<(2*n)+3;j++){
-            //console.log(">>>j = "+j)
             for(k=i; k<i+(6);k++){
-                //console.log(">>>>>>i = "+i)
-                //console.log(">>>>>>k = "+k)
-                if(((k+3)%3)==0){
+                if(((k+3)%3)===0){
                     e[j][k] = a[num];
-                    //console.log("A["+j+"] = "+A[num]);
-                    //console.log("matrix["+j+"]["+k+"] = "+matrix[j][k]);
                 }
-                else if(((k+3)%3)==1){
+                else if(((k+3)%3)===1){
                     e[j][k] = b[num];
-                    //console.log("B ["+j+"] = "+B[num]);
-                    //console.log("matrix["+j+"]["+k+"] = "+matrix[j][k]);
                 }
-                else if(((k+3)%3)==2){
-                    e[j][k] = c[num];
-                    //console.log("C ["+j+"] = "+C[num]);
-                    //console.log("matrix["+j+"]["+k+"] = "+matrix[j][k]);
+                else if(((k+3)%3)===2){
                     num++;
                 }
             }
@@ -263,42 +239,29 @@ const Spline =()=>{
             i=k-3;
         }
         e[(n*3)-1][0] = 1;
-        /*console.log(A)
-        console.log(B)
-        console.log(C)*/
-        //console.log(d)
-        //console.log(e)
         var f = solve(e, d);
-        //console.log(f)
         var ans = f[n+2]*Math.pow(7,2)+(f[n+3])*(7)+(f[n+4])
         setQuad(ans);
     }
 
     const inputN = (event) =>{
-        console.log(event.target.value)
         setN(event.target.value)
     }
 
     const inputX = (event) =>{
-        console.log(event.target.value)
         setX(event.target.value)
     }
 
     const calculateRoot = () =>{
         var n = parseInt(N)
-        //var Xcalnum = parseFloat(Xcal)
-        /*for(var i=0;i<2;i++){
-            Index[i] = (document.getElementById(N).value)-1;
-        }*/
-        //console.log(Index)
         LinearSpline(n-1, n)
         QuadraticSpline(n)
-        console.log(dataQuadratic);
         setHtml(print());
     }
     
     return (
             <Container>
+                <h1>Spline Interpolation Method</h1>
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>

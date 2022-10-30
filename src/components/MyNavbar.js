@@ -34,7 +34,22 @@ const MyNavbar = () => {
               <NavDropdown.Item href="/secant">Secant</NavDropdown.Item>
               <NavDropdown.Divider />
             </NavDropdown>
-
+            <NavDropdown
+              id="nav-dropdown-dark-example"
+              title="Matrix"
+              menuVariant="dark"
+            >
+              <NavDropdown.Item href="/gauss">Gauss Elimination</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/cramer">Cramer</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/jacobi">Jacobi</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/seidel">Gauss Seidel</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/conjugate">Conjugate</NavDropdown.Item>
+              <NavDropdown.Divider />
+            </NavDropdown>
             <NavDropdown
               id="nav-dropdown-dark-example"
               title="Interpolation Methods"
@@ -45,6 +60,7 @@ const MyNavbar = () => {
               <NavDropdown.Item href="/spline">Spline</NavDropdown.Item>
               <NavDropdown.Divider />
             </NavDropdown>
+            <Nav.Link href="/regression">Regression</Nav.Link>
           </Nav>
       </Navbar>
   );
