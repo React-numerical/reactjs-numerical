@@ -141,7 +141,7 @@ const Gauss =()=>{
     
     return (
             <Container>
-                <h1>Gauss</h1>
+                <h1>Gauss Elimination</h1>
                 <br></br>
                 <Container>
                 <Table striped bordered hover variant="dark">

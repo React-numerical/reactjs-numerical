@@ -94,14 +94,6 @@ const Jacobi =()=>{
         return e
     }
     
-    const round = (num, place) =>{
-        if (num < 0)
-            return -round(-num, place);
-        var p = Math.pow(10, place);
-        var n = (num * p).toPrecision(15);
-        return Math.round(n) / p;
-    }
-    
     const calJacobi = (x) =>{
         var i, j;
         var ans0;
@@ -117,7 +109,7 @@ const Jacobi =()=>{
                 ans0 = ans[i];
                 ans[i] = x[i][n];
                 for (j = 0; j < n; j++) {
-                    if(x[i][(j%n+n)%n]!=x[i][i]){
+                    if(x[i][(j%n+n)%n]!==x[i][i]){
                         ans[i] -= x[i][(j%n+n)%n]*xold[(j%n+n)%n];
                     }
                 }
@@ -143,7 +135,6 @@ const Jacobi =()=>{
     const calculateRoot = () =>{
         var a = [];
         fill2DimensionsArray(a, 4, 5)
-        var b = new Array(4)
         var i,j;
         var s = "";
         for(i = 0; i<4; i++){

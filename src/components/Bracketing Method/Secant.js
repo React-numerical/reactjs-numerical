@@ -1,33 +1,55 @@
 import { useEffect, useState } from "react"
-import { Button, Container, Form, Table } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { evaluate } from 'mathjs'
 import { Line } from "react-chartjs-2";
+import Select from 'react-select'
+import axios from "axios";
+
+const endpoint = "http://localhost:3500";
 
 const Secant =()=>{
     const [todo, setTodo] = useState([]);
+
     const [newEquation, setnewEquation] = useState("");
+    const [newXL, setnewXL] = useState(0);
+    const [newXR, setnewXR] = useState(0);
 
-    const handleSubmit = () => {
-        if (Equation === "") return;
-        const newTodo = { id:todo.length+1 ,Equation: newEquation };
-        setTodo([...todo, newTodo]);
-        setnewEquation("");
-    };
-
-    const handleDeleteTodo = id => {
-        const newTodo = todo.filter(todo => todo.id !== id);
-        setTodo(newTodo);
-    };
+    const fetchTodos = async () => {
+        const { status, data }  = await axios.get(
+            endpoint+"/data1"
+        );
+        console.log("data = ");
+        console.log(data);
+        console.log("status = "+status)
+        if (status === 200) {
+            setTodo(data);
+          }
+    }
 
     useEffect(()=>{
-        fetch("http://localhost:3500/data")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setTodo(result);
-                }
-            )
-    },[])
+        fetchTodos();
+    },[]);
+
+    const handleSubmit = async () => {
+        if (Equation === "") return;
+        const newTodo = { id:""+(todo.length+1) ,Equation: newEquation,XL: newXL,XR: newXR,label: newEquation};
+        const { status, data} = await axios.post(endpoint + "/data1", newTodo);
+        fetchTodos();
+        if (status === 200) {
+            fetchTodos();
+            setnewEquation("");
+            setnewXL(0);
+            setnewXR(0);
+        }
+        
+    };
+
+    const handleDeleteTodo = async id => {
+        const { status, data} = await axios.delete(endpoint + `/data1/${id}`);
+        if (status === 200) {
+            fetchTodos();
+        }
+    };
 
     const print = () =>{
         setValueIter(data.map((x)=>x.Iteration))
@@ -203,16 +225,28 @@ const Secant =()=>{
             <Container>
                 <h1>Secant Method</h1>
                 <h3>Create Equation</h3>
-                <input type="text" id="equation" value={newEquation} onChange={e => setnewEquation(e.target.value)} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
+                <Row>
+                    <Col>
+                    <input type="text" id="equation" value={newEquation} onChange={e => setnewEquation(e.target.value)} className="form-control"></input>
+                    </Col>
+                    <Col>
+                    <input type="number" id="xl" value={newXL} onChange={e => setnewXL(e.target.value)} className="form-control"></input>
+                    </Col>
+                    <Col>
+                    <input type="number" id="xr" value={newXR} onChange={e => setnewXR(e.target.value)} className="form-control"></input>
+                    </Col>
+                </Row>
                 <br></br>
-                <Button onClick={handleSubmit}>Create</Button>
+                <Button variant="dark" onClick={handleSubmit}>Create</Button>
                 <br></br>
                 <br></br>
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
-                            <th width="20%">Number</th>
-                            <th width="60%">Equation</th>
+                            <th width="10%">Number</th>
+                            <th width="30%">Equation</th>
+                            <th width="20%">X0</th>
+                            <th width="20%">X1</th>
                             <th width="20%"></th>
                         </tr>
                     </thead>
@@ -222,9 +256,11 @@ const Secant =()=>{
                             <tr key={index}>
                                 <td>{index+1}</td>
                                 <td>{element.Equation}</td>
+                                <td>{element.XL}</td>
+                                <td>{element.XR}</td>
                                 <td>
-                                <Button onClick={e => setEquation(element.Equation)}>Use</Button>
-                                <Button onClick={() => handleDeleteTodo(element.id)}>Delete</Button>
+                                <Button variant="light" style={ {margin:10} } onClick={() => {setEquation(element.Equation);setX0(element.XL);setX1(element.XR);}}>Use</Button>
+                                <Button variant="light" style={ {margin:10} }onClick={() => handleDeleteTodo(element.id)}>Delete</Button>
                                 </td>
                             </tr>)
                         })}
@@ -232,12 +268,14 @@ const Secant =()=>{
                 </Table>
                 <Form >
                     <Form.Group className="mb-3">
-                    <Form.Label>Input g(x)</Form.Label>
+                    <Form.Label>Input f(x)</Form.Label>
+                        <Select options={todo} onChange={(e) => {setEquation(e.Equation)}}/>
+                        <br></br>
                         <input type="text" id="equation" value={Equation} onChange={inputEquation} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
                         <Form.Label>Input X0</Form.Label>
-                        <input type="number" id="X0" onChange={inputX0} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
+                        <input type="number" id="X0" value={X0} onChange={inputX0} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
                         <Form.Label>Input X1</Form.Label>
-                        <input type="number" id="X1" onChange={inputX1} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
+                        <input type="number" id="X1" value={X1} onChange={inputX1} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
                     </Form.Group>
                     <Button variant="dark" onClick={calculateRoot}>
                         Calculate

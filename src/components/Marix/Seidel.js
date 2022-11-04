@@ -79,34 +79,10 @@ const Seidel =()=>{
             }
         }
     }
-
-
-    const update = (ans, xold) =>{
-        var i;
-        for (i = 0; i < n; i++) {
-            xold[i] = ans[i];
-        }
-        
-    }
     
     const error = (ans0,ans) =>{
         var e = Math.abs(ans0-ans);
         return e
-    }
-    
-   const round = (num, place) =>{
-        if (num < 0)
-            return -round(-num, place);
-        var p = Math.pow(10, place);
-        var n = (num * p).toPrecision(15);
-        return Math.round(n) / p;
-    }
-    
-    const print1 = (iter, ans, n) =>{
-        console.log("Iteration:"+iter)
-        for (var i = 0; i < n; i++) {
-            console.log("x"+(i+1)+": "+(round(ans[i],4)));
-        }
     }
     
     const calSeidel = (x) =>{
@@ -124,7 +100,7 @@ const Seidel =()=>{
                 ans0 = ans[i];
                 ans[i] = x[i][n];
                 for (j = 0; j < n; j++) {
-                    if(x[i][(j%n+n)%n]!=x[i][i]){
+                    if(x[i][(j%n+n)%n]!==x[i][i]){
                         ans[i] -= x[i][(j%n+n)%n]*xold[(j%n+n)%n];
                     }
                 }
@@ -142,42 +118,6 @@ const Seidel =()=>{
                 x4:ans[3],
             }
             data.push(obj);
-            print1(iter, ans, n);
-        }
-    }
-
-    const calJacobi = (x) =>{
-        var i, j;
-        var ans0;
-        var ans = [0, 0, 0, 0];
-        var xold = [0, 0, 0, 0];
-        var er = [100, 100, 100, 100];
-        var e = 0.000001;
-        var iter = 0;
-        var obj = {}
-        while(er[0]>e && er[1]>e && er[2]>e && er[3]>e){
-            iter++
-            for (i = 0; i < n; i++) {
-                ans0 = ans[i];
-                ans[i] = x[i][n];
-                for (j = 0; j < n; j++) {
-                    if(x[i][(j%n+n)%n]!=x[i][i]){
-                        ans[i] -= x[i][(j%n+n)%n]*xold[(j%n+n)%n];
-                    }
-                }
-                ans[i] = ans[i]/x[i][i];
-                er[i] = error(ans0,ans[i]);
-                
-            }
-            obj = {
-                Iteration:iter,
-                x1:ans[0],
-                x2:ans[1],
-                x3:ans[2],
-                x4:ans[3],
-            }
-            data.push(obj);
-            update(ans,xold);
         }
     }
 
@@ -187,7 +127,6 @@ const Seidel =()=>{
     const calculateRoot = () =>{
         var a = [];
         fill2DimensionsArray(a, 4, 5)
-        var b = new Array(4)
         var i,j;
         var s = "";
         for(i = 0; i<4; i++){

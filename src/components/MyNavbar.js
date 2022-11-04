@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 
 const MyNavbar = () => {
   return (
-      <Navbar bg="dark" variant="dark">
+      <Navbar bg="dark" variant="dark" className="mb-3">
         <Navbar.Brand href="/">
             <img
               alt=""
@@ -52,7 +52,7 @@ const MyNavbar = () => {
             </NavDropdown>
             <NavDropdown
               id="nav-dropdown-dark-example"
-              title="Interpolation Methods"
+              title="Interpolation"
               menuVariant="dark"
             >
               <NavDropdown.Item href="/lagrange">Lagrange</NavDropdown.Item>
@@ -60,7 +60,16 @@ const MyNavbar = () => {
               <NavDropdown.Item href="/spline">Spline</NavDropdown.Item>
               <NavDropdown.Divider />
             </NavDropdown>
-            <Nav.Link href="/regression">Regression</Nav.Link>
+            <NavDropdown
+              id="nav-dropdown-dark-example"
+              title="Regression"
+              menuVariant="dark"
+            >
+              <NavDropdown.Item href="/regression">Regression</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/multiregression">Multipile Regression</NavDropdown.Item>
+              <NavDropdown.Divider />
+            </NavDropdown>
           </Nav>
       </Navbar>
   );

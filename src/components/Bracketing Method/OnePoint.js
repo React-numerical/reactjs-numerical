@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Button, Container, Form, Table } from "react-bootstrap";
 import { evaluate } from 'mathjs'
 import { Line } from "react-chartjs-2";
+import Select from 'react-select'
 
 const OnePoint =()=>{
     const [todo, setTodo] = useState([]);
@@ -92,7 +93,7 @@ const OnePoint =()=>{
 
     const handleSubmit = () => {
         if (Equation === "") return;
-        const newTodo = { id:todo.length+1 ,Equation: newEquation };
+        const newTodo = { id:todo.length+1 ,Equation: newEquation,label: newEquation};
         setTodo([...todo, newTodo]);
         setnewEquation("");
     };
@@ -197,7 +198,7 @@ const OnePoint =()=>{
                 <h3>Create Equation</h3>
                 <input type="text" id="equation" value={newEquation} onChange={e => setnewEquation(e.target.value)} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
                 <br></br>
-                <Button onClick={handleSubmit}>Create</Button>
+                <Button variant="dark" onClick={handleSubmit}>Create</Button>
                 <br></br>
                 <br></br>
                 <Table striped bordered hover variant="dark">
@@ -215,8 +216,8 @@ const OnePoint =()=>{
                                 <td>{index+1}</td>
                                 <td>{element.Equation}</td>
                                 <td>
-                                <Button onClick={e => setEquation(element.Equation)}>Use</Button>
-                                <Button onClick={() => handleDeleteTodo(element.id)}>Delete</Button>
+                                <Button variant="light" style={ {margin:10} } onClick={e => setEquation(element.Equation)}>Use</Button>
+                                <Button variant="light" style={ {margin:10} }onClick={() => handleDeleteTodo(element.id)}>Delete</Button>
                                 </td>
                             </tr>)
                         })}
@@ -225,6 +226,8 @@ const OnePoint =()=>{
                 <Form >
                     <Form.Group className="mb-3">
                     <Form.Label>Input g(x)</Form.Label>
+                        <Select options={todo} onChange={(e) => {setEquation(e.Equation)}}/>
+                        <br></br>
                         <input type="text" id="equation" value={Equation} onChange={inputEquation} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>
                         <Form.Label>Input X0</Form.Label>
                         <input type="number" id="X0" onChange={inputX0} style={{width:"20%", margin:"0 auto"}} className="form-control"></input>

@@ -17,6 +17,7 @@ import Jacobi from "./components/Marix/Jacobi";
 import Conjugate from "./components/Marix/Conjugate";
 import Cramer from "./components/Marix/Cramer";
 import Seidel from "./components/Marix/Seidel";
+import MultipileRegression from "./components/Regression/MultipileRegress";
 
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/lagrange" element={<Lagrange/>}/>
         <Route path="/spline" element={<Spline/>}/>
         <Route path="/regression" element={<Regression/>}/>
+        <Route path="/multiregression" element={<MultipileRegression/>}/>
        </Routes>
       </BrowserRouter>
     </div>
